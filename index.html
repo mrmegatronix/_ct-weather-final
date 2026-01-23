@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Christchurch Weather Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Oswald:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: #050505;
+            overflow: hidden;
+            color: #ffffff;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        .font-heading {
+            font-family: 'Oswald', sans-serif;
+        }
+
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        @keyframes spin-slow {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-5px);
+            }
+        }
+
+        @keyframes float-sway {
+
+            0%,
+            100% {
+                transform: translate(0px, 0px);
+            }
+
+            50% {
+                transform: translate(3px, -5px);
+            }
+        }
+
+        @keyframes rain-fall {
+            0% {
+                transform: translateY(-4px);
+                opacity: 0;
+            }
+
+            30% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(8px);
+                opacity: 0;
+            }
+        }
+
+        @keyframes flash {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            5% {
+                opacity: 0.3;
+            }
+
+            10% {
+                opacity: 1;
+            }
+
+            15% {
+                opacity: 1;
+            }
+
+            20% {
+                opacity: 0.3;
+            }
+
+            25% {
+                opacity: 1;
+            }
+        }
+
+        @keyframes progress {
+            from {
+                width: 0%;
+            }
+
+            to {
+                width: 100%;
+            }
+        }
+
+        .animate-spin-slow {
+            animation: spin-slow 12s linear infinite;
+            transform-origin: center;
+        }
+
+        .animate-float {
+            animation: float 4s ease-in-out infinite;
+        }
+
+        .animate-float-sway {
+            animation: float-sway 5s ease-in-out infinite;
+        }
+
+        .animate-rain {
+            animation: rain-fall 0.6s linear infinite;
+        }
+
+        .animate-flash {
+            animation: flash 3s ease-in-out infinite;
+        }
+
+        .animate-progress {
+            animation: progress 60s linear infinite;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- App Root -->
+    <div id="app-container"
+        class="relative h-screen w-screen text-white overflow-hidden bg-[#050505] font-sans flex flex-col selection:bg-[#D4AF37] selection:text-black">
+
+        <!-- Background Canvas -->
+        <div class="absolute inset-0 z-0 pointer-events-none">
+            <canvas id="weather-canvas" class="absolute inset-0 w-full h-full"></canvas>
+        </div>
+
+        <!-- Loading Screen -->
+        <div id="loading-screen"
+            class="absolute inset-0 z-50 flex items-center justify-center bg-black text-[#D4AF37] font-heading text-6xl animate-pulse">
+            LOADING SYSTEM...
+        </div>
+
+        <!-- Error Screen -->
+        <div id="error-screen"
+            class="hidden absolute inset-0 z-50 flex flex-col items-center justify-center bg-black text-red-500 font-heading">
+            <div class="text-6xl mb-4">⚠</div>
+            <div id="error-message" class="text-4xl tracking-widest">SYSTEM ERROR</div>
+            <button id="retry-btn"
+                class="mt-8 border border-[#D4AF37] text-[#D4AF37] px-6 py-2 text-xl hover:bg-[#D4AF37] hover:text-black transition-colors">
+                RETRY CONNECTION
+            </button>
+        </div>
+
+        <!-- Main Content -->
+        <div id="main-content"
+            class="hidden relative z-10 flex flex-col flex-1 p-6 pb-0 w-full max-w-[1920px] mx-auto min-h-0">
+
+            <!-- Header -->
+            <header class="flex justify-between items-start w-full mb-2 shrink-0">
+                <div class="flex flex-col w-max">
+                    <div
+                        class="flex items-baseline justify-start leading-none font-bold font-heading text-white drop-shadow-2xl whitespace-nowrap">
+                        <span class="text-[6.5rem] tracking-tighter">CHRISTCHURCH</span>
+                    </div>
+                    <div class="w-full border-t-4 border-[#D4AF37] mt-2 pt-2">
+                        <div class="flex justify-between items-center w-full">
+                            <span class="text-2xl text-[#D4AF37] font-bold drop-shadow-md">N</span>
+                            <span class="text-2xl text-[#D4AF37] font-bold drop-shadow-md">E</span>
+                            <span class="text-2xl text-[#D4AF37] font-bold drop-shadow-md">W</span>
+                            <span class="text-2xl text-[#D4AF37] font-bold drop-shadow-md">&nbsp;</span>
+                            <span class="text-2xl text-[#D4AF37] font-bold drop-shadow-md">Z</span>
+                            <span class="text-2xl text-[#D4AF37] font-bold drop-shadow-md">E</span>
+                            <span class="text-2xl text-[#D4AF37] font-bold drop-shadow-md">A</span>
+                            <span class="text-2xl text-[#D4AF37] font-bold drop-shadow-md">L</span>
+                            <span class="text-2xl text-[#D4AF37] font-bold drop-shadow-md">A</span>
+                            <span class="text-2xl text-[#D4AF37] font-bold drop-shadow-md">N</span>
+                            <span class="text-2xl text-[#D4AF37] font-bold drop-shadow-md">D</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex flex-col items-end w-max ml-auto">
+                    <!-- Clock -->
+                    <div id="clock-time"
+                        class="flex items-baseline justify-end leading-none font-bold font-heading text-white drop-shadow-2xl relative">
+                        <!-- JS will populate -->
+                    </div>
+                    <!-- Date -->
+                    <div class="w-full border-t-4 border-[#D4AF37] mt-2 pt-2">
+                        <div id="clock-date" class="flex justify-between items-center w-full">
+                            <!-- JS will populate -->
+                        </div>
+                    </div>
+
+                    <div id="last-sync"
+                        class="text-gray-300 text-xs font-bold mt-2 tracking-widest uppercase text-right shadow-black drop-shadow-md">
+                        <!-- JS sync time -->
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main Hero -->
+            <div class="flex-1 flex flex-row items-center justify-center gap-12 min-h-0 mb-6">
+                <div id="main-weather-icon"
+                    class="w-[18rem] h-[18rem] drop-shadow-[0_0_80px_rgba(255,215,0,0.25)] animate-float shrink-0">
+                    <!-- Icon -->
+                </div>
+
+                <div class="flex flex-col items-center justify-center shrink-0 min-w-max">
+                    <div class="flex items-center">
+                        <div class="flex items-start leading-none relative py-2">
+                            <span id="temp-value"
+                                class="text-[10rem] font-bold font-heading text-white drop-shadow-2xl z-10">--</span>
+                            <span class="text-[5rem] font-heading text-[#D4AF37] mt-4 ml-2">°</span>
+                        </div>
+                        <div class="flex flex-col justify-center ml-10 pl-6 border-l-4 border-[#D4AF37]/30 py-4 gap-2">
+                            <div class="text-4xl font-bold tracking-widest text-[#D4AF37]">
+                                H <span id="high-value" class="text-white ml-2">--°</span>
+                            </div>
+                            <div class="text-4xl font-bold tracking-widest text-[#D4AF37]/70">
+                                L <span id="low-value" class="text-white/70 ml-2">--°</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="weather-desc"
+                        class="text-5xl font-bold text-gray-100 uppercase tracking-wider drop-shadow-lg text-center mt-2">
+                        LOADING
+                    </div>
+                </div>
+            </div>
+
+            <!-- Info Cards -->
+            <div class="flex flex-row justify-between gap-4 w-full mb-6 shrink-0">
+
+                <!-- Next Sunset -->
+                <div
+                    class="bg-black/30 backdrop-blur-md border border-white/10 rounded-xl shadow-2xl flex-1 flex flex-col items-center justify-between py-4 px-1 min-w-0 overflow-hidden h-auto relative">
+                    <div class="flex-1 flex flex-col justify-center items-center">
+                        <div class="w-16 h-16 mb-2 relative opacity-60 animate-float">
+                            <!-- Icon manually inserted or reused from JS? I'll let JS handle icons if they are complex strings, but here I can use the same JS helper or just hardcode the SVG if static. But wait, I have 6 cards. -->
+                            <!-- NOTE: I will use a simple inline or let JS inject the icon first time. -->
+                            <!-- Decision: Let JS inject the icon to keep it clean, or hardcode the specific icon here. JS is better for consistency. -->
+                            <!-- Wait, for simple icons, I'll hardcode the "Type" in a data-attribute or just id and let JS fill it. -->
+                            <!-- Actually, static icons like Sunset can be hardcoded here to avoid JS overhead if desired, but I defined them in JS. I will populate them in JS for consistency. -->
+                            <div id="icon-sunset" class="w-full h-full"></div>
+                        </div>
+                        <!-- For now, I'll put a placeholder and let JS fill the icon OR I'll add the manual SVG call in JS. I'll add a helper in JS to fill these. -->
+                        <!-- Actually, I will just replicate the SVG string in JS and inject it. -->
+                        <script>
+                            // Quick inline placeholder? No, keep it clean.
+                            // I will add IDs to icon containers.
+                        </script>
+                        <!-- Re-reading code: The plan had specific icons for each card. I'll just put the container and let JS render. -->
+                        <!-- WAIT: In my JS `App.render`, I only updated the VALUES, not the icons for the cards (except wind/main). -->
+                        <!-- I need to ensure the icons are there. I will update `app.js` to render static icons on init, OR just hardcode them in HTML as they are static (except Moon/Wind). -->
+                        <!-- The Sunset/Sunrise/Rain/UV icons are static (don't change based on weather, except Moon). -->
+                        <!-- I will ADD the static icons to HTML now to save JS lines, using the SVG paths I know. -> actually, I'll use the JS helper I made to keep it DRY. -->
+                        <div id="card-icon-sunset" class="w-16 h-16 mb-2 relative opacity-60 animate-float"></div>
+                        <div id="next-sunset-value"
+                            class="text-4xl font-heading font-bold text-white whitespace-nowrap leading-tight mt-1 drop-shadow-xl">
+                            --:--</div>
+                    </div>
+                    <div
+                        class="text-gray-300 text-xl font-bold uppercase tracking-widest mt-2 truncate w-full text-center drop-shadow-md">
+                        NEXT SUNSET</div>
+                </div>
+
+                <!-- Wind -->
+                <div
+                    class="bg-black/30 backdrop-blur-md border border-white/10 rounded-xl shadow-2xl flex-1 flex flex-col items-center justify-between py-4 px-1 min-w-0 overflow-hidden h-auto relative">
+                    <div class="flex-1 flex flex-col justify-center items-center">
+                        <div class="animate-float">
+                            <div class="flex flex-col items-center">
+                                <div class="flex items-center gap-3">
+                                    <div id="wind-icon-container"></div>
+                                    <div
+                                        class="text-4xl font-heading font-bold text-white whitespace-nowrap leading-tight mt-1 drop-shadow-xl">
+                                        <span id="wind-speed">--</span> <span class="text-2xl text-gray-400">KM/H</span>
+                                    </div>
+                                </div>
+                                <div id="wind-dir"
+                                    class="text-xl font-bold font-heading text-[#D4AF37] mt-1 tracking-wider whitespace-nowrap">
+                                    --</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                        class="text-gray-300 text-xl font-bold uppercase tracking-widest mt-2 truncate w-full text-center drop-shadow-md">
+                        Wind</div>
+                </div>
+
+                <!-- Rain -->
+                <div
+                    class="bg-black/30 backdrop-blur-md border border-white/10 rounded-xl shadow-2xl flex-1 flex flex-col items-center justify-between py-4 px-1 min-w-0 overflow-hidden h-auto relative">
+                    <div class="flex-1 flex flex-col justify-center items-center">
+                        <div id="card-icon-rain" class="w-16 h-16 mb-2 animate-float"></div>
+                        <div id="rain-value"
+                            class="text-4xl font-heading font-bold text-white whitespace-nowrap leading-tight mt-1 drop-shadow-xl">
+                            --</div>
+                    </div>
+                    <div id="rain-label"
+                        class="text-gray-300 text-xl font-bold uppercase tracking-widest mt-2 truncate w-full text-center drop-shadow-md">
+                        Rain (1hr)</div>
+                </div>
+
+                <!-- UV -->
+                <div
+                    class="bg-black/30 backdrop-blur-md border border-white/10 rounded-xl shadow-2xl flex-1 flex flex-col items-center justify-between py-4 px-1 min-w-0 overflow-hidden h-auto relative">
+                    <div class="flex-1 flex flex-col justify-center items-center">
+                        <div id="card-icon-uv" class="w-16 h-16 mb-1 animate-float"></div>
+                        <div id="uv-value"
+                            class="text-4xl font-heading font-bold text-white whitespace-nowrap leading-tight mt-1 drop-shadow-xl">
+                            --</div>
+                        <div id="uv-time" class="text-lg text-[#D4AF37] font-bold font-heading mt-0 leading-none">--
+                        </div>
+                    </div>
+                    <div
+                        class="text-gray-300 text-xl font-bold uppercase tracking-widest mt-2 truncate w-full text-center drop-shadow-md">
+                        UV PEAK</div>
+                </div>
+
+                <!-- Moon -->
+                <div
+                    class="bg-black/30 backdrop-blur-md border border-white/10 rounded-xl shadow-2xl flex-1 flex flex-col items-center justify-between py-4 px-1 min-w-0 overflow-hidden h-auto relative">
+                    <div class="flex-1 flex flex-col justify-center items-center">
+                        <div id="card-icon-moon" class="w-16 h-16 mb-2"></div>
+                        <div id="moon-phase"
+                            class="text-3xl font-heading font-bold text-[#D4AF37] text-center leading-none mt-2">--
+                        </div>
+                    </div>
+                    <div
+                        class="text-gray-300 text-xl font-bold uppercase tracking-widest mt-2 truncate w-full text-center drop-shadow-md">
+                        Moon</div>
+                </div>
+
+                <!-- Next Sunrise -->
+                <div
+                    class="bg-black/30 backdrop-blur-md border border-white/10 rounded-xl shadow-2xl flex-1 flex flex-col items-center justify-between py-4 px-1 min-w-0 overflow-hidden h-auto relative">
+                    <div class="flex-1 flex flex-col justify-center items-center">
+                        <div id="card-icon-sunrise" class="w-16 h-16 mb-2 animate-float"></div>
+                        <div id="next-sunrise-value"
+                            class="text-4xl font-heading font-bold text-white whitespace-nowrap leading-tight mt-1 drop-shadow-xl">
+                            --:--</div>
+                    </div>
+                    <div
+                        class="text-gray-300 text-xl font-bold uppercase tracking-widest mt-2 truncate w-full text-center drop-shadow-md">
+                        NEXT SUNRISE</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer
+            class="relative z-20 w-screen bg-[#0a0a0a]/95 border-t-2 border-[#D4AF37]/50 py-3 pb-6 shadow-[0_-10px_50px_rgba(0,0,0,0.8)] shrink-0">
+            <div id="forecast-container" class="flex w-full justify-between px-4">
+                <!-- JS will populate -->
+            </div>
+            <div
+                class="absolute bottom-0 left-0 h-4 bg-[#D4AF37] w-full animate-progress shadow-[0_0_30px_#D4AF37] z-50">
+            </div>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        // Inject static icons once DOM is ready, using the Exposed Icons from app.js?
+        // No, app.js is a module or script. If I didn't export them, I can't access them.
+        // I will add a small logic in app.js init() to populate these static icons.
+    </script>
+</body>
+
+</html>
