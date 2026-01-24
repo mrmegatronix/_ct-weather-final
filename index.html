@@ -158,7 +158,7 @@
         </div>
 
         <!-- Global SVG Defs -->
-        <svg class="hidden" aria-hidden="true">
+        <svg aria-hidden="true" width="0" height="0" style="position: absolute; pointer-events: none;">
             <defs>
                 <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
                     <stop offset="0%" stop-color="#FFD700" />
@@ -284,25 +284,6 @@
                 <div
                     class="bg-black/30 backdrop-blur-md border border-white/10 rounded-xl shadow-2xl flex-1 flex flex-col items-center justify-between py-4 px-1 min-w-0 overflow-hidden h-auto relative">
                     <div class="flex-1 flex flex-col justify-center items-center">
-                        <div class="w-16 h-16 mb-2 relative opacity-60 animate-float">
-                            <!-- Icon manually inserted or reused from JS? I'll let JS handle icons if they are complex strings, but here I can use the same JS helper or just hardcode the SVG if static. But wait, I have 6 cards. -->
-                            <!-- NOTE: I will use a simple inline or let JS inject the icon first time. -->
-                            <!-- Decision: Let JS inject the icon to keep it clean, or hardcode the specific icon here. JS is better for consistency. -->
-                            <!-- Wait, for simple icons, I'll hardcode the "Type" in a data-attribute or just id and let JS fill it. -->
-                            <!-- Actually, static icons like Sunset can be hardcoded here to avoid JS overhead if desired, but I defined them in JS. I will populate them in JS for consistency. -->
-                            <div id="icon-sunset" class="w-full h-full"></div>
-                        </div>
-                        <!-- For now, I'll put a placeholder and let JS fill the icon OR I'll add the manual SVG call in JS. I'll add a helper in JS to fill these. -->
-                        <!-- Actually, I will just replicate the SVG string in JS and inject it. -->
-                        <script>
-                            // Quick inline placeholder? No, keep it clean.
-                            // I will add IDs to icon containers.
-                        </script>
-                        <!-- Re-reading code: The plan had specific icons for each card. I'll just put the container and let JS render. -->
-                        <!-- WAIT: In my JS `App.render`, I only updated the VALUES, not the icons for the cards (except wind/main). -->
-                        <!-- I need to ensure the icons are there. I will update `app.js` to render static icons on init, OR just hardcode them in HTML as they are static (except Moon/Wind). -->
-                        <!-- The Sunset/Sunrise/Rain/UV icons are static (don't change based on weather, except Moon). -->
-                        <!-- I will ADD the static icons to HTML now to save JS lines, using the SVG paths I know. -> actually, I'll use the JS helper I made to keep it DRY. -->
                         <div id="card-icon-sunset" class="w-16 h-16 mb-2 relative opacity-60 animate-float"></div>
                         <div id="next-sunset-value"
                             class="text-4xl font-heading font-bold text-white whitespace-nowrap leading-tight mt-1 drop-shadow-xl">

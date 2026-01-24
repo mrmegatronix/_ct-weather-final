@@ -40,7 +40,7 @@ const REFRESH_INTERVAL_MS = 10 * 60 * 1000; // 10 minutes
 const Icons = {
     Sun: (cls) => `
         <svg class="${cls} overflow-visible" viewBox="0 0 64 64">
-            <g class="animate-spin-slow origin-center">
+            <g class="animate-spin-slow" style="transform-origin: 32px 32px;">
                 ${[0, 45, 90, 135, 180, 225, 270, 315].map(deg =>
         `<line x1="32" y1="10" x2="32" y2="4" stroke="url(#goldGradient)" stroke-width="4" stroke-linecap="round" transform="rotate(${deg} 32 32)" />`
     ).join('')}
@@ -52,7 +52,7 @@ const Icons = {
         <svg class="${cls} overflow-visible" viewBox="0 0 64 64">
             <path d="M4 54 L60 54" stroke="url(#silverGradient)" stroke-width="3" stroke-linecap="round" opacity="0.8" />
             <g transform="translate(0, -4)">
-                <g class="animate-spin-slow origin-[32px_38px]">
+                <g class="animate-spin-slow" style="transform-origin: 32px 38px;">
                     ${[0, 45, 90, 135, 180, 225, 270, 315].map(deg =>
         `<line x1="32" y1="24" x2="32" y2="18" stroke="url(#goldGradient)" stroke-width="3" stroke-linecap="round" transform="rotate(${deg} 32 38)" />`
     ).join('')}
@@ -66,7 +66,7 @@ const Icons = {
         <svg class="${cls} overflow-visible" viewBox="0 0 64 64">
             <path d="M4 54 L60 54" stroke="url(#silverGradient)" stroke-width="3" stroke-linecap="round" opacity="0.8" />
             <g transform="translate(0, 4)">
-                <g class="animate-spin-slow origin-[32px_38px]">
+                <g class="animate-spin-slow" style="transform-origin: 32px 38px;">
                     ${[0, 45, 90, 135, 180, 225, 270, 315].map(deg =>
         `<line x1="32" y1="24" x2="32" y2="18" stroke="url(#goldGradient)" stroke-width="3" stroke-linecap="round" transform="rotate(${deg} 32 38)" />`
     ).join('')}
@@ -115,7 +115,7 @@ const Icons = {
     UV: (cls) => `
         <svg class="${cls} overflow-visible" viewBox="0 0 64 64">
             <path d="M32 4 L56 14 V28 C56 46 32 60 32 60 C32 60 8 46 8 28 V14 L32 4 Z" fill="none" stroke="url(#goldGradient)" stroke-width="2.5" stroke-linejoin="round" filter="url(#glow)" class="opacity-90" />
-            <g class="animate-spin-slow origin-center">
+            <g class="animate-spin-slow" style="transform-origin: 32px 32px;">
                 ${[0, 45, 90, 135, 180, 225, 270, 315].map(deg =>
         `<line x1="32" y1="22" x2="32" y2="16" stroke="url(#goldGradient)" stroke-width="3" stroke-linecap="round" transform="rotate(${deg} 32 32)" />`
     ).join('')}
@@ -124,7 +124,7 @@ const Icons = {
         </svg>
     `,
     Navigation: (cls, style, fill = 'currentColor') => `
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${cls}" style="${style}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="${cls}" style="${style}; width: 100%; height: 100%;">
             <polygon points="3 11 22 2 13 21 11 13 3 11" fill="${fill}" stroke="${fill}" />
         </svg>
     `
