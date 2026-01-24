@@ -157,31 +157,6 @@
             <canvas id="weather-canvas" class="absolute inset-0 w-full h-full"></canvas>
         </div>
 
-        <!-- Global SVG Defs -->
-        <svg aria-hidden="true" width="0" height="0" style="position: absolute; pointer-events: none;">
-            <defs>
-                <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stop-color="#FFD700" />
-                    <stop offset="100%" stop-color="#D4AF37" />
-                </linearGradient>
-                <linearGradient id="silverGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stop-color="#F3F4F6" />
-                    <stop offset="100%" stop-color="#9CA3AF" />
-                </linearGradient>
-                <linearGradient id="blueGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" stop-color="#60A5FA" />
-                    <stop offset="100%" stop-color="#2563EB" />
-                </linearGradient>
-                <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
-                    <feGaussianBlur stdDeviation="2" result="coloredBlur" />
-                    <feMerge>
-                        <feMergeNode in="coloredBlur" />
-                        <feMergeNode in="SourceGraphic" />
-                    </feMerge>
-                </filter>
-            </defs>
-        </svg>
-
         <!-- Loading Screen -->
         <div id="loading-screen"
             class="absolute inset-0 z-50 flex items-center justify-center bg-black text-[#D4AF37] font-heading text-6xl animate-pulse">
@@ -207,8 +182,10 @@
             <header class="flex justify-between items-start w-full mb-2 shrink-0">
                 <div class="flex flex-col w-max">
                     <div
-                        class="flex items-baseline justify-start leading-none font-bold font-heading text-white drop-shadow-2xl whitespace-nowrap">
+                        class="flex items-center justify-start leading-none font-bold font-heading text-white drop-shadow-2xl whitespace-nowrap">
                         <span class="text-[6.5rem] tracking-tighter">CHRISTCHURCH</span>
+                        <span
+                            class="w-4 h-4 ml-6 rounded-full bg-green-500 animate-pulse shadow-[0_0_15px_#22c55e]"></span>
                     </div>
                     <div class="w-full border-t-4 border-[#D4AF37] mt-2 pt-2">
                         <div class="flex justify-between items-center w-full">
