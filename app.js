@@ -37,34 +37,9 @@ const REFRESH_INTERVAL_MS = 10 * 60 * 1000; // 10 minutes
 // HELPERS - ICONS (SVG Strings)
 // ==========================================
 
-const getIconGradients = () => `
-  <defs>
-    <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#FFD700" />
-      <stop offset="100%" stop-color="#D4AF37" />
-    </linearGradient>
-    <linearGradient id="silverGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#F3F4F6" />
-      <stop offset="100%" stop-color="#9CA3AF" />
-    </linearGradient>
-    <linearGradient id="blueGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#60A5FA" />
-      <stop offset="100%" stop-color="#2563EB" />
-    </linearGradient>
-    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
-      <feMerge>
-        <feMergeNode in="coloredBlur"/>
-        <feMergeNode in="SourceGraphic"/>
-      </feMerge>
-    </filter>
-  </defs>
-`;
-
 const Icons = {
     Sun: (cls) => `
         <svg class="${cls} overflow-visible" viewBox="0 0 64 64">
-            ${getIconGradients()}
             <g class="animate-spin-slow origin-center">
                 ${[0, 45, 90, 135, 180, 225, 270, 315].map(deg =>
         `<line x1="32" y1="10" x2="32" y2="4" stroke="url(#goldGradient)" stroke-width="4" stroke-linecap="round" transform="rotate(${deg} 32 32)" />`
@@ -75,7 +50,6 @@ const Icons = {
     `,
     Sunrise: (cls) => `
         <svg class="${cls} overflow-visible" viewBox="0 0 64 64">
-            ${getIconGradients()}
             <path d="M4 54 L60 54" stroke="url(#silverGradient)" stroke-width="3" stroke-linecap="round" opacity="0.8" />
             <g transform="translate(0, -4)">
                 <g class="animate-spin-slow origin-[32px_38px]">
@@ -90,7 +64,6 @@ const Icons = {
     `,
     Sunset: (cls) => `
         <svg class="${cls} overflow-visible" viewBox="0 0 64 64">
-            ${getIconGradients()}
             <path d="M4 54 L60 54" stroke="url(#silverGradient)" stroke-width="3" stroke-linecap="round" opacity="0.8" />
             <g transform="translate(0, 4)">
                 <g class="animate-spin-slow origin-[32px_38px]">
@@ -105,19 +78,16 @@ const Icons = {
     `,
     Moon: (cls) => `
         <svg class="${cls} overflow-visible animate-float" viewBox="0 0 64 64">
-            ${getIconGradients()}
             <path d="M48 32C48 45.2548 37.2548 56 24 56C19.8 56 15.9 54.9 12.5 53C16.5 60 25 62 32 62C48.5685 62 62 48.5685 62 32C62 18.5 55 8 48 3.5C48 3.5 48 18 48 32Z" fill="url(#silverGradient)" filter="url(#glow)" />
         </svg>
     `,
     Cloud: (cls, opacity = "") => `
         <svg class="${cls} overflow-visible animate-float ${opacity}" viewBox="0 0 64 64">
-            ${getIconGradients()}
             <path d="M46 48H18C11.3726 48 6 42.6274 6 36C6 29.8 10.6 24.7 16.6 24.1C17.8 15.6 25 9 33.5 9C42.8 9 50.5 15.8 52 24.8C57.6 25.9 62 30.7 62 36.5C62 42.85 56.85 48 50.5 48H46Z" fill="url(#silverGradient)" opacity="0.9" />
         </svg>
     `,
     Rain: (cls) => `
         <svg class="${cls} overflow-visible" viewBox="0 0 64 64">
-            ${getIconGradients()}
             <path d="M46 38H18C11.3726 38 6 32.6274 6 26C6 19.8 10.6 14.7 16.6 14.1C17.8 5.6 25 -1 33.5 -1C42.8 -1 50.5 5.8 52 14.8C57.6 15.9 62 20.7 62 26.5C62 32.85 56.85 38 50.5 38H46Z" fill="url(#silverGradient)" />
             <g>
                 <path d="M22 42L18 52" stroke="url(#blueGradient)" stroke-width="3" stroke-linecap="round" class="animate-rain" style="animation-delay: 0s" />
@@ -128,7 +98,6 @@ const Icons = {
     `,
     Snow: (cls) => `
         <svg class="${cls} overflow-visible" viewBox="0 0 64 64">
-             ${getIconGradients()}
             <path d="M46 38H18C11.3726 38 6 32.6274 6 26C6 19.8 10.6 14.7 16.6 14.1C17.8 5.6 25 -1 33.5 -1C42.8 -1 50.5 5.8 52 14.8C57.6 15.9 62 20.7 62 26.5C62 32.85 56.85 38 50.5 38H46Z" fill="url(#silverGradient)" />
             <g class="animate-float-sway">
                 <circle cx="20" cy="50" r="2" fill="#fff" />
@@ -139,14 +108,12 @@ const Icons = {
     `,
     Thunder: (cls) => `
         <svg class="${cls} overflow-visible" viewBox="0 0 64 64">
-            ${getIconGradients()}
             <path d="M46 38H18C11.3726 38 6 32.6274 6 26C6 19.8 10.6 14.7 16.6 14.1C17.8 5.6 25 -1 33.5 -1C42.8 -1 50.5 5.8 52 14.8C57.6 15.9 62 20.7 62 26.5C62 32.85 56.85 38 50.5 38H46Z" fill="#52525B" />
             <path d="M34 36L24 50H32L30 62L44 46H34L36 36Z" fill="url(#goldGradient)" class="animate-flash" stroke="#fff" stroke-width="1" />
         </svg>
     `,
     UV: (cls) => `
         <svg class="${cls} overflow-visible" viewBox="0 0 64 64">
-            ${getIconGradients()}
             <path d="M32 4 L56 14 V28 C56 46 32 60 32 60 C32 60 8 46 8 28 V14 L32 4 Z" fill="none" stroke="url(#goldGradient)" stroke-width="2.5" stroke-linejoin="round" filter="url(#glow)" class="opacity-90" />
             <g class="animate-spin-slow origin-center">
                 ${[0, 45, 90, 135, 180, 225, 270, 315].map(deg =>
@@ -507,8 +474,6 @@ const App = {
             if (el) el.innerHTML = iconFn(cls);
         };
 
-        setIcon('icon-sunset', Icons.Sunset); // Wait, I named it card-icon-sunset in HTML
-        // Let's correct the IDs based on HTML I just wrote
         setIcon('card-icon-sunset', Icons.Sunset);
         setIcon('card-icon-rain', Icons.Rain);
         setIcon('card-icon-uv', Icons.UV);
@@ -583,9 +548,10 @@ const App = {
         this.setLoading(true);
         try {
             const data = await fetchWeatherData();
-            console.log("Weather Data:", data);
+            console.log("Weather Data Fetch Successful:", data);
             this.state.data = data;
             this.state.lastUpdated = new Date();
+            console.log("Last Updated:", this.state.lastUpdated.toLocaleTimeString());
             this.state.error = null;
             this.render();
         } catch (err) {
