@@ -442,26 +442,26 @@ const initWeatherBackground = (weatherCode, isDay, sunrise, sunset, precipitatio
         particles.forEach((p) => {
             ctx.beginPath();
             if (isRain) {
-                ctx.strokeStyle = \`rgba(174, 194, 224, \${p.opacity})\`;
-               ctx.lineWidth = 1.5;
-               ctx.moveTo(p.x, p.y);
-               ctx.lineTo(p.x, p.y + p.length);
-               ctx.stroke();
-               p.y += p.speed * 2; 
-               if (p.y > height) p.y = -p.length;
-           } else if (isSnow) {
-               ctx.fillStyle = \`rgba(255, 255, 255, \${p.opacity})\`;
-               ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-               ctx.fill();
-               p.y += p.speed / 2;
-               p.x += Math.sin(p.y / 50) * 0.5;
-               if (p.y > height) p.y = -5;
-           }
-       });
+                ctx.strokeStyle = `rgba(174, 194, 224, ${p.opacity})`;
+                ctx.lineWidth = 1.5;
+                ctx.moveTo(p.x, p.y);
+                ctx.lineTo(p.x, p.y + p.length);
+                ctx.stroke();
+                p.y += p.speed * 2;
+                if (p.y > height) p.y = -p.length;
+            } else if (isSnow) {
+                ctx.fillStyle = `rgba(255, 255, 255, ${p.opacity})`;
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fill();
+                p.y += p.speed / 2;
+                p.x += Math.sin(p.y / 50) * 0.5;
+                if (p.y > height) p.y = -5;
+            }
+        });
     };
 
     const loop = () => {
-        ctx.clearRect(0,0,width,height);
+        ctx.clearRect(0, 0, width, height);
         drawBackground();
         drawStars();
         drawCelestialBody();
@@ -504,7 +504,7 @@ const App = {
         // Inject static SVG icons into placeholders
         const setIcon = (id, iconFn, cls = "w-full h-full") => {
             const el = document.getElementById(id);
-            if(el) el.innerHTML = iconFn(cls);
+            if (el) el.innerHTML = iconFn(cls);
         };
 
         setIcon('icon-sunset', Icons.Sunset); // Wait, I named it card-icon-sunset in HTML
@@ -522,7 +522,7 @@ const App = {
             loading: document.getElementById('loading-screen'),
             error: document.getElementById('error-screen'),
             mainContent: document.getElementById('main-content'),
-            
+
             // Text Elements
             temp: document.getElementById('temp-value'),
             high: document.getElementById('high-value'),
@@ -532,7 +532,7 @@ const App = {
             windSpeed: document.getElementById('wind-speed'),
             windDir: document.getElementById('wind-dir'),
             windIcon: document.getElementById('wind-icon-container'),
-            
+
             nextSunset: document.getElementById('next-sunset-value'),
             rainValue: document.getElementById('rain-value'),
             rainLabel: document.getElementById('rain-label'),
@@ -540,24 +540,24 @@ const App = {
             uvTime: document.getElementById('uv-time'),
             moonPhase: document.getElementById('moon-phase'),
             nextSunrise: document.getElementById('next-sunrise-value'),
-            
+
             // Main Icon
             mainIcon: document.getElementById('main-weather-icon'),
-            
+
             // Footer
             forecastContainer: document.getElementById('forecast-container'),
-            
+
             // Header
             clockTime: document.getElementById('clock-time'),
             clockDate: document.getElementById('clock-date'),
             lastSync: document.getElementById('last-sync'),
-            
+
             // Error
             errorMsg: document.getElementById('error-message'),
             retryBtn: document.getElementById('retry-btn')
         };
-        
-        if(this.elements.retryBtn) {
+
+        if (this.elements.retryBtn) {
             this.elements.retryBtn.addEventListener('click', () => this.loadData());
         }
     },
@@ -599,17 +599,17 @@ const App = {
 
     setLoading(loading) {
         this.state.loading = loading;
-        if(loading && !this.state.data) {
-             this.elements.loading.classList.remove('hidden');
-             this.elements.mainContent.classList.add('hidden');
-             this.elements.error.classList.add('hidden');
+        if (loading && !this.state.data) {
+            this.elements.loading.classList.remove('hidden');
+            this.elements.mainContent.classList.add('hidden');
+            this.elements.error.classList.add('hidden');
         } else {
-             this.elements.loading.classList.add('hidden');
+            this.elements.loading.classList.add('hidden');
         }
     },
 
     renderError() {
-        if(this.state.error && !this.state.data) {
+        if (this.state.error && !this.state.data) {
             this.elements.error.classList.remove('hidden');
             this.elements.mainContent.classList.add('hidden');
             this.elements.errorMsg.textContent = this.state.error;
@@ -618,19 +618,19 @@ const App = {
 
     render() {
         if (!this.state.data) return;
-        
+
         this.elements.mainContent.classList.remove('hidden');
         this.elements.error.classList.add('hidden');
 
         const { current, daily } = this.state.data;
         const now = new Date();
-        
+
         // Canvas (Safe to re-call, it handles its own cleanup)
         initWeatherBackground(current.weatherCode, !!current.isDay, daily.sunrise[0], daily.sunset[0], current.precipitation);
 
         // Header Sync Status
-        if(this.state.lastUpdated) {
-            this.elements.lastSync.textContent = \`DATA SYNC: \${this.state.lastUpdated.toLocaleTimeString('en-NZ', {hour: '2-digit', minute:'2-digit'})}\`;
+        if (this.state.lastUpdated) {
+            this.elements.lastSync.textContent = `DATA SYNC: ${this.state.lastUpdated.toLocaleTimeString('en-NZ', { hour: '2-digit', minute: '2-digit' })}`;
         }
 
         // Main Weather
@@ -642,8 +642,8 @@ const App = {
 
         // Temp
         this.elements.temp.textContent = Math.round(current.temperature);
-        this.elements.high.textContent = \`\${Math.round(daily.temperatureMax[0])}°\`;
-        this.elements.low.textContent = \`\${Math.round(daily.temperatureMin[0])}°\`;
+        this.elements.high.textContent = `${Math.round(daily.temperatureMax[0])}°`;
+        this.elements.low.textContent = `${Math.round(daily.temperatureMin[0])}°`;
         this.elements.desc.textContent = displayDescription;
 
         // Cards
@@ -661,16 +661,16 @@ const App = {
         // Wind
         this.elements.windSpeed.textContent = Math.round(current.windSpeed);
         this.elements.windDir.textContent = getWindDirection(current.windDirection);
-        this.elements.windIcon.innerHTML = Icons.Navigation("text-[#D4AF37] drop-shadow-lg", \`transform: rotate(\${current.windDirection}deg)\`, "#D4AF37");
+        this.elements.windIcon.innerHTML = Icons.Navigation("text-[#D4AF37] drop-shadow-lg", `transform: rotate(${current.windDirection}deg)`, "#D4AF37");
 
         // Rain
         this.updateRainCard(); // Call explicitly to set initial state
 
         // UV
         const uvPeakTime = current.uvPeak?.time ? new Date(current.uvPeak.time) : new Date();
-        const uvPeakTimeStr = uvPeakTime.toLocaleTimeString('en-NZ', {hour: 'numeric', minute:'2-digit'}).replace(" ", "").toLowerCase();
+        const uvPeakTimeStr = uvPeakTime.toLocaleTimeString('en-NZ', { hour: 'numeric', minute: '2-digit' }).replace(" ", "").toLowerCase();
         this.elements.uvValue.textContent = current.uvPeak?.value.toFixed(1);
-        this.elements.uvTime.textContent = \`@\${uvPeakTimeStr}\`;
+        this.elements.uvTime.textContent = `@${uvPeakTimeStr}`;
 
         // Moon
         this.elements.moonPhase.textContent = getMoonPhase(now);
@@ -680,14 +680,14 @@ const App = {
     },
 
     updateRainCard() {
-        if(!this.state.data) return;
+        if (!this.state.data) return;
         const { current, daily } = this.state.data;
-        if(this.state.showTotalRain) {
-             this.elements.rainValue.innerHTML = \`\${daily.rainSum[0]} <span class="text-2xl text-gray-400">mm</span>\`;
-             this.elements.rainLabel.textContent = "Rain (Day)";
+        if (this.state.showTotalRain) {
+            this.elements.rainValue.innerHTML = `${daily.rainSum[0]} <span class="text-2xl text-gray-400">mm</span>`;
+            this.elements.rainLabel.textContent = "Rain (Day)";
         } else {
-             this.elements.rainValue.innerHTML = \`\${current.precipitation} <span class="text-2xl text-gray-400">mm</span>\`;
-             this.elements.rainLabel.textContent = "Rain (1hr)";
+            this.elements.rainValue.innerHTML = `${current.precipitation} <span class="text-2xl text-gray-400">mm</span>`;
+            this.elements.rainLabel.textContent = "Rain (1hr)";
         }
     },
 
@@ -695,7 +695,7 @@ const App = {
         let hours = date.getHours() % 12 || 12;
         const minutes = date.getMinutes().toString().padStart(2, '0');
         const ampm = date.getHours() >= 12 ? 'pm' : 'am';
-        
+
         // We use innerHTML to insert the structure similar to renderTimeWithBlink
         // But for static cards we might not need blink loop there, just time.
         // The original code had blinking on these cards too? 
@@ -707,15 +707,15 @@ const App = {
         // Actually the original App re-renders everything on state change.
         // I will just render HH:MM ampm here statically for now to avoid complexity,
         // OR I can use the same helper and just update the colon opacity.
-        
-        el.innerHTML = \`
+
+        el.innerHTML = `
             <div class="flex items-baseline justify-center">
-                <span>\${hours}</span>
+                <span>${hours}</span>
                 <span class="colon-blink mx-[1px]">:</span>
-                <span>\${minutes}</span>
-                <span class="text-xl text-gray-400 font-bold ml-1 uppercase">\${ampm}</span>
+                <span>${minutes}</span>
+                <span class="text-xl text-gray-400 font-bold ml-1 uppercase">${ampm}</span>
             </div>
-        \`;
+        `;
     },
 
     updateClock() {
@@ -723,7 +723,7 @@ const App = {
         let hoursRaw = d.getHours();
         const ampm = hoursRaw >= 12 ? 'PM' : 'AM';
         hoursRaw = hoursRaw % 12;
-        hoursRaw = hoursRaw ? hoursRaw : 12; 
+        hoursRaw = hoursRaw ? hoursRaw : 12;
         const hours = hoursRaw.toString().padStart(2, '0');
         const minutes = d.getMinutes().toString().padStart(2, '0');
         const isEvenSecond = d.getSeconds() % 2 === 0;
@@ -732,14 +732,14 @@ const App = {
         // We can just update text content of spans if we had them cached individually, 
         // or just re-render the HTML string.
         if (this.elements.clockTime) {
-            this.elements.clockTime.innerHTML = \`
-                <span class="text-[6.5rem] tracking-tighter">\${hours}</span>
-                <span class="text-[5.5rem] mx-2 -mt-4 transition-opacity duration-150 ease-in-out text-[#D4AF37]" style="opacity: \${isEvenSecond ? 1 : 0.2}">:</span>
-                <span class="text-[6.5rem] tracking-tighter">\${minutes}</span>
-                <span class="text-4xl text-[#D4AF37] ml-4 self-start mt-6">\${ampm}</span>
-            \`;
+            this.elements.clockTime.innerHTML = `
+                <span class="text-[6.5rem] tracking-tighter">${hours}</span>
+                <span class="text-[5.5rem] mx-2 -mt-4 transition-opacity duration-150 ease-in-out text-[#D4AF37]" style="opacity: ${isEvenSecond ? 1 : 0.2}">:</span>
+                <span class="text-[6.5rem] tracking-tighter">${minutes}</span>
+                <span class="text-4xl text-[#D4AF37] ml-4 self-start mt-6">${ampm}</span>
+            `;
         }
-        
+
         // Update Colon Blinkers elsewhere (Next Sunset/Sunrise)
         const blinkers = document.querySelectorAll('.colon-blink');
         blinkers.forEach(b => {
@@ -751,36 +751,36 @@ const App = {
         const dateStr = d.toLocaleDateString('en-NZ', { weekday: 'long', day: 'numeric', month: 'long' }).toUpperCase();
         const dateChars = dateStr.split('');
         if (this.elements.clockDate) {
-             this.elements.clockDate.innerHTML = dateChars.map(char => 
-                \`<span class="text-2xl font-bold text-[#D4AF37] drop-shadow-md">\${char === ' ' ? '&nbsp;' : char}</span>\`
-             ).join('');
+            this.elements.clockDate.innerHTML = dateChars.map(char =>
+                `<span class="text-2xl font-bold text-[#D4AF37] drop-shadow-md">${char === ' ' ? '&nbsp;' : char}</span>`
+            ).join('');
         }
     },
 
     renderForecast(daily) {
-        if(!this.elements.forecastContainer) return;
-        
+        if (!this.elements.forecastContainer) return;
+
         const html = daily.time.slice(1, 8).map((t, index) => {
             const dailyIndex = index + 1;
             const date = new Date(t);
             const dayName = date.toLocaleDateString('en-NZ', { weekday: 'short' });
             const icon = getWeatherIcon(daily.weatherCode[dailyIndex], true, "w-full h-full");
-            
-            return \`
+
+            return `
               <div class="flex-1 flex flex-col items-center justify-center border-r border-white/5 last:border-0 px-1 group">
-                <span class="text-2xl text-gray-400 font-bold uppercase mb-1 group-hover:text-white transition-colors">\${dayName}</span>
+                <span class="text-2xl text-gray-400 font-bold uppercase mb-1 group-hover:text-white transition-colors">${dayName}</span>
                 <div class="w-12 h-12 my-1 transform group-hover:scale-110 transition-transform">
-                   \${icon}
+                   ${icon}
                 </div>
                 <div class="flex gap-2 font-heading text-2xl mt-1">
-                  <span class="text-white font-bold">\${Math.round(daily.temperatureMax[dailyIndex])}°</span>
+                  <span class="text-white font-bold">${Math.round(daily.temperatureMax[dailyIndex])}°</span>
                   <span class="text-gray-700">|</span>
-                  <span class="text-gray-500 font-bold">\${Math.round(daily.temperatureMin[dailyIndex])}°</span>
+                  <span class="text-gray-500 font-bold">${Math.round(daily.temperatureMin[dailyIndex])}°</span>
                 </div>
               </div>
-            \`;
+            `;
         }).join('');
-        
+
         this.elements.forecastContainer.innerHTML = html;
     }
 };

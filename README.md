@@ -1,20 +1,22 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
 
-# Run and deploy your AI Studio app
+# Christchurch Weather Dashboard
 
-This contains everything you need to run your app locally.
+A high-fidelity, single-page digital signage weather dashboard for Christchurch, New Zealand.
+Designed with a "Gold & Black" aesthetic inspired by Coasters Tavern.
 
-View your app in AI Studio: https://ai.studio/apps/drive/1UewUo1YivNgmmlbOcEbI-dgIeE821bkY
+## Technologies
+- **HTML5**
+- **Vanilla JavaScript** (ES6+)
+- **Tailwind CSS** (via CDN)
+- **Open-Meteo API** (Weather Data)
 
-## Run Locally
+## Setup
+1. Clone the repository.
+2. Open `index.html` in any modern web browser.
+3. No build steps or installation required.
 
-**Prerequisites:**  Node.js
-
-
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+## Features
+- Real-time weather updates (Temperature, Wind, Rain, UV).
+- Dynamic canvas-based background animations (Rain, Snow, Stars).
+- 7-Day Forecast.
+- Digital Clock with "Coasters Tavern" gold theme.

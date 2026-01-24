@@ -3,7 +3,9 @@ PROJECT: Christchurch Weather Dashboard (Coasters Tavern Style)
 
 OBJECTIVE:
 Create a high-fidelity, single-page digital signage weather dashboard for Christchurch, New Zealand.
-The app must run offline/locally (pwa/spa) but fetch real data when available.
+The app must be a Static HTML/CSS/Vanilla JS Website.
+- No external build tools required (e.g. no Vite/React).
+- Must run directly in browser via simple file serving or index.html.
 
 AESTHETICS & THEME:
 - Theme: Dark, "Gold & Black" (Coasters Tavern vibe).
@@ -18,6 +20,7 @@ CORE FEATURES:
    - Data Source: Open-Meteo API (Latitude: -43.5321, Longitude: 172.6362).
    - Metrics: Temperature, Description (e.g., Mostly Cloudy), High/Low.
    - Layout: Must NOT overlap. generous spacing.
+   - Logic: Contained in `app.js`.
 2. Clock & Date:
    - Large digital clock (12h format).
    - Date must be VISUALLY the exact same width as the clock time.
@@ -43,6 +46,7 @@ CORE FEATURES:
    - Sun/Moon must RISE on RIGHT and SET on LEFT.
    - Horizon line is the top of the Footer.
    - Rain speed must be realistic (not hyper-fast).
+   - Rain Logic: If precipitation > 0mm, FORCE the display to show "Rain" icon and background effect.
 
 STRICT DESIGN RULES:
 1. **Typography Size**: NO text on the screen can be smaller than the height of the Date font. All labels must be large and readable.
@@ -50,11 +54,14 @@ STRICT DESIGN RULES:
    - Info boxes must be in a single horizontal line.
    - Significant spacing between Main Weather and Info Boxes.
 3. **Icons**: Must be "Professional" and High-Fidelity. Use SVGs with Gradients.
-4. **Rain Logic**: If precipitation > 0mm, FORCE the display to show "Rain" icon and background effect.
-5. **Footer**: Must span 100% of the screen width.
-6. **Clipping**: TEXT MUST NOT BE CLIPPED. Ensure margins/padding allow for full font rendering.
+4. **Footer**: Must span 100% of the screen width.
+5. **Clipping**: TEXT MUST NOT BE CLIPPED. Ensure margins/padding allow for full font rendering.
+6. **Code Structure**:
+   - `index.html`: Contains structure and embedded CSS/animations.
+   - `app.js`: Contains all logic, data fetching, and canvas rendering.
+   - Keep self-contained. No external dependencies besides Tailwind CDN and Fonts.
 
 ANIMATIONS:
-- Background: Canvas-based particle system.
-- Icons: Subtle floating/spinning animations.
+- Background: Canvas-based particle system (in `app.js`).
+- Icons: Subtle floating/spinning animations (CSS in `index.html`).
 - Page: Smooth fade-ins on load.
