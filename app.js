@@ -103,12 +103,63 @@ const Icons = {
             <path d="M32 8 L32 18 M26 12 L32 18 L38 12" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow)" />
         </svg>
     `,
-    Moon: (cls) => `
+    Moon: (cls, phaseIndex = 4) => {
+        // 0: New Moon, 1: Waxing Crescent, 2: First Quarter, 3: Waxing Gibbous
+        // 4: Full Moon, 5: Waning Gibbous, 6: Last Quarter, 7: Waning Crescent
+        const moonRadius = 26;
+        const cx = 32;
+        const cy = 32;
+
+        // Base circle (the dark part or the glow)
+        let svg = `
         <svg class="${cls} overflow-visible animate-float" viewBox="0 0 64 64">
             ${getTavernDefinitions()}
-            <path d="M48 32C48 45.2548 37.2548 56 24 56C19.8 56 15.9 54.9 12.5 53C16.5 60 25 62 32 62C48.5685 62 62 48.5685 62 32C62 18.5 55 8 48 3.5C48 3.5 48 18 48 32Z" fill="url(#silverGradient)" filter="url(#glow)" />
-        </svg>
-    `,
+            <circle cx="${cx}" cy="${cy}" r="${moonRadius}" fill="#1A237E" opacity="0.3" />`;
+
+        if (phaseIndex === 0) {
+            // New Moon - just a subtle outline
+            svg += `<circle cx="${cx}" cy="${cy}" r="${moonRadius}" stroke="url(#silverGradient)" stroke-width="1" fill="none" opacity="0.5" />`;
+        } else if (phaseIndex === 4) {
+            // Full Moon
+            svg += `<circle cx="${cx}" cy="${cy}" r="${moonRadius}" fill="url(#silverGradient)" filter="url(#glow)" />`;
+        } else {
+            // Phases using overlapping paths to create crescents/quarters/gibbous
+            // Simplified approach: use a mask-like second circle or a complex path
+            // For a better visual, we use the 'path' approach
+            const sweep = phaseIndex < 4 ? 0 : 1;
+            const ratio = Math.abs(phaseIndex - 4) / 4; // 1 at 0/8, 0 at 4
+            const rx = moonRadius * (phaseIndex % 4 === 0 ? 0 : Math.cos((phaseIndex * Math.PI) / 4));
+
+            // Full moon path as base for the visible part
+            // We'll use two semi-circles and a 'lens' to represent the phase
+            const isWaxing = phaseIndex > 0 && phaseIndex < 4;
+            const isWaning = phaseIndex > 4 && phaseIndex < 8;
+
+            // Simple path logic for moon phases:
+            // Arc 1: Semi circle
+            // Arc 2: Elliptical arc that changes from concave to convex
+            let d = "";
+            if (phaseIndex === 2) { // First Quarter
+                d = `M ${cx} ${cy - moonRadius} A ${moonRadius} ${moonRadius} 0 0 1 ${cx} ${cy + moonRadius} L ${cx} ${cy - moonRadius}`;
+            } else if (phaseIndex === 6) { // Last Quarter
+                d = `M ${cx} ${cy - moonRadius} A ${moonRadius} ${moonRadius} 0 0 0 ${cx} ${cy + moonRadius} L ${cx} ${cy - moonRadius}`;
+            } else {
+                // Approximate crescents and gibbous
+                const innerR = Math.abs(Math.cos((phaseIndex * Math.PI) / 4)) * moonRadius;
+                const direction = (phaseIndex > 0 && phaseIndex < 4) ? 1 : 0;
+                const innerSweep = (phaseIndex === 1 || phaseIndex === 7) ? direction : 1 - direction;
+
+                d = `M ${cx} ${cy - moonRadius} 
+                     A ${moonRadius} ${moonRadius} 0 0 ${direction} ${cx} ${cy + moonRadius} 
+                     A ${innerR} ${moonRadius} 0 0 ${innerSweep} ${cx} ${cy - moonRadius}`;
+            }
+
+            svg += `<path d="${d}" fill="url(#silverGradient)" filter="url(#glow)" />`;
+        }
+
+        svg += `</svg>`;
+        return svg;
+    },
     Cloud: (cls, opacity = "") => `
         <svg class="${cls} overflow-visible animate-float ${opacity}" viewBox="0 0 64 64">
             ${getTavernDefinitions()}
@@ -214,7 +265,7 @@ const getMoonPhase = (date) => {
     if (b >= 8) b = 0;
 
     const phases = ['New Moon', 'Waxing Crescent', 'First Quarter', 'Waxing Gibbous', 'Full Moon', 'Waning Gibbous', 'Last Quarter', 'Waning Crescent'];
-    return phases[b];
+    return { name: phases[b], index: b };
 };
 
 const getWindDirection = (degrees) => {
@@ -511,7 +562,6 @@ const App = {
         setIcon('card-icon-sunset', Icons.Sunset);
         setIcon('card-icon-rain', Icons.Rain);
         setIcon('card-icon-uv', Icons.UV);
-        setIcon('card-icon-moon', Icons.Moon);
         setIcon('card-icon-sunrise', Icons.Sunrise);
     },
 
@@ -678,7 +728,10 @@ const App = {
         this.elements.uvTime.textContent = `@${uvPeakTimeStr}`;
 
         // Moon
-        this.elements.moonPhase.textContent = getMoonPhase(now);
+        const moonData = getMoonPhase(now);
+        this.elements.moonPhase.textContent = moonData.name;
+        const moonIconEl = document.getElementById('card-icon-moon');
+        if (moonIconEl) moonIconEl.innerHTML = Icons.Moon("w-16 h-16 mb-2", moonData.index);
 
         // Daily Forecast
         this.renderForecast(daily);
